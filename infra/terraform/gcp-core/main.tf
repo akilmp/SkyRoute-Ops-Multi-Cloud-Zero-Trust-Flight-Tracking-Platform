@@ -5,12 +5,20 @@ terraform {
       source  = "hashicorp/google"
       version = ">= 5.0"
     }
+    ns1 = {
+      source  = "ns1-terraform/ns1"
+      version = "~> 1.13"
+    }
   }
 }
 
 provider "google" {
   project = var.project_id
   region  = var.region
+}
+
+provider "ns1" {
+  apikey = var.ns1_api_key
 }
 
 module "core_network" {
@@ -33,6 +41,15 @@ module "global_dns" {
   source     = "./modules/global-dns"
   project_id = var.project_id
   domain     = var.domain
+}
+
+module "ns1" {
+  source         = "../ns1"
+  zone           = var.ns1_zone
+  record         = var.ns1_record
+  answers        = var.ns1_answers
+  pulsar_app_id  = var.ns1_pulsar_app_id
+  pulsar_type_id = var.ns1_pulsar_type_id
 }
 
 # Service account for GitHub Actions
