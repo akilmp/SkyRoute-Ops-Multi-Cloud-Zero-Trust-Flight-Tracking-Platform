@@ -295,7 +295,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
-      - run: go test ./...
+      - run: |
+          cd services/ingest-api
+          go test ./...
+      - run: go install github.com/open-policy-agent/conftest@latest
+        env:
+          GOBIN: /usr/local/bin
+      - run: conftest test policy/
       - run: docker build -t ghcr.io/${{github.repository}}/ingest-api:${{github.sha}} .
       - run: docker push ghcr.io/${{github.repository}}/ingest-api:${{github.sha}}
   deploy:
@@ -306,7 +312,10 @@ jobs:
         uses: argocd-image-updater/argocd-image-updater-action@v1
 ```
 
-*Argo CD* auto‑syncs once PR merged; canary proceeds 10 % → 50 % → 100 % if SLO holds for 5 min.
+The build job provisions Go, executes `go test ./...` in `services/ingest-api`,
+and installs `conftest` to validate Rego policies under `policy/`. Any failing
+test aborts the workflow. *Argo CD* auto‑syncs once PR merged; canary proceeds
+10 % → 50 % → 100 % if SLO holds for 5 min.
 
 ---
 
