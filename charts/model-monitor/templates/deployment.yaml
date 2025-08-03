@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "model-monitor.fullname" . }}
+  labels:
+    {{- include "model-monitor.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "model-monitor.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "model-monitor.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: model-monitor
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: BASELINE_PATH
+              value: {{ .Values.config.baselinePath | quote }}
+            - name: RECENT_PATH
+              value: {{ .Values.config.recentPath | quote }}
+            - name: SLEEP_SECONDS
+              value: {{ .Values.config.sleepSeconds | quote }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.service.port }}
