@@ -1,0 +1,37 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: norootcontainers
+spec:
+  crd:
+    spec:
+      names:
+        kind: NoRootContainers
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package norootcontainers
+
+        has_run_as_non_root(c) {
+          c.securityContext.runAsNonRoot == true
+        }
+
+        has_non_root_user(c) {
+          c.securityContext.runAsUser > 0
+        }
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Pod"
+          container := input.review.object.spec.containers[_]
+          not has_run_as_non_root(container)
+          not has_non_root_user(container)
+          msg := sprintf("container %q must set runAsNonRoot or a non-zero runAsUser", [container.name])
+        }
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Pod"
+          container := input.review.object.spec.initContainers[_]
+          not has_run_as_non_root(container)
+          not has_non_root_user(container)
+          msg := sprintf("initContainer %q must set runAsNonRoot or a non-zero runAsUser", [container.name])
+        }
