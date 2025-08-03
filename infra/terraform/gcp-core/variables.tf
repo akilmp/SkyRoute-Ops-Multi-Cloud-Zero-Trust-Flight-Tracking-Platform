@@ -26,32 +26,8 @@ variable "domain" {
   type        = string
 }
 
-variable "ns1_api_key" {
-  description = "API key for NS1"
-  type        = string
-}
+variable "cdn_backend_group" {
+  description = "Instance group or NEG backing the Cloud CDN service"
 
-variable "ns1_zone" {
-  description = "DNS zone for NS1 records"
-  type        = string
-}
-
-variable "ns1_record" {
-  description = "Fully qualified domain name of the weighted record"
-  type        = string
-}
-
-variable "ns1_answers" {
-  description = "Map of endpoint IP addresses to their weights"
-  type        = map(number)
-}
-
-variable "ns1_pulsar_app_id" {
-  description = "ID of the NS1 Pulsar application"
-  type        = string
-}
-
-variable "ns1_pulsar_type_id" {
-  description = "Pulsar job type identifier"
   type        = string
 }

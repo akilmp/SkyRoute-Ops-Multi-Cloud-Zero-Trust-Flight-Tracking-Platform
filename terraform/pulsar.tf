@@ -26,11 +26,6 @@ variable "record" {
   type        = string
 }
 
-variable "answers" {
-  description = "Map of endpoint IP addresses to their initial weights"
-  type        = map(number)
-}
-
 variable "pulsar_app_id" {
   description = "ID of the NS1 Pulsar application"
   type        = string
@@ -60,6 +55,27 @@ resource "ns1_pulsarjob" "ingress" {
   config  = {}
 }
 
+data "terraform_remote_state" "aws" {
+  backend = "local"
+  config = {
+    path = "../infra/terraform/aws-core/terraform.tfstate"
+  }
+}
+
+data "terraform_remote_state" "gcp" {
+  backend = "local"
+  config = {
+    path = "../infra/terraform/gcp-core/terraform.tfstate"
+  }
+}
+
+locals {
+  cache_answers = {
+    (data.terraform_remote_state.aws.outputs.cloudfront_domain_name) = 10,
+    (data.terraform_remote_state.gcp.outputs.cdn_ip)                 = 10,
+  }
+}
+
 resource "ns1_record" "weighted_ingress" {
   zone   = var.zone
   domain = var.record
@@ -67,7 +83,7 @@ resource "ns1_record" "weighted_ingress" {
   ttl    = 60
 
   dynamic "answers" {
-    for_each = var.answers
+    for_each = local.cache_answers
     content {
       answer = answers.key
       meta = {

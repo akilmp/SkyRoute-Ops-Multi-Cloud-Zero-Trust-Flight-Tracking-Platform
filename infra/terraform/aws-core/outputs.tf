@@ -14,12 +14,7 @@ output "argocd_cluster_ca" {
   value = module.eks_cluster.cluster_ca_certificate
 }
 
-output "ns1_record_id" {
-  description = "ID of the NS1 weighted record"
-  value       = module.ns1.record_id
-}
+output "cloudfront_domain_name" {
+  value = aws_cloudfront_distribution.edge.domain_name
 
-output "ns1_record_weights" {
-  description = "Map of endpoint weights for the NS1 record"
-  value       = module.ns1.record_weights
 }

@@ -1,9 +1,4 @@
-output "ns1_record_id" {
-  description = "ID of the NS1 weighted record"
-  value       = module.ns1.record_id
-}
+output "cdn_ip" {
+  value = google_compute_global_address.cdn.address
 
-output "ns1_record_weights" {
-  description = "Map of endpoint weights for the NS1 record"
-  value       = module.ns1.record_weights
 }
