@@ -1,0 +1,27 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingest-api
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: >-
+      ingest-api=ghcr.io/example/ingest-api
+    argocd-image-updater.argoproj.io/update-strategy.ingest-api: semver
+    argocd-image-updater.argoproj.io/write-back-method: git
+spec:
+  project: default
+  source:
+    repoURL: >-
+      https://github.com/example/SkyRoute-Ops-Multi-Cloud-Zero-Trust-Flight-Tracking-Platform.git
+    targetRevision: HEAD
+    path: charts/ingest-api
+    helm:
+      releaseName: ingest-api
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ingest-api
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
