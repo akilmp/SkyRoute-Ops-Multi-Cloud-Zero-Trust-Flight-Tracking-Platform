@@ -9,11 +9,19 @@ terraform {
       source  = "hashicorp/tls"
       version = "~> 4.0"
     }
+    ns1 = {
+      source  = "ns1-terraform/ns1"
+      version = "~> 1.13"
+    }
   }
 }
 
 provider "aws" {
   region = var.region
+}
+
+provider "ns1" {
+  apikey = var.ns1_api_key
 }
 
 module "core_network" {
@@ -33,6 +41,15 @@ module "eks_cluster" {
 module "global_dns" {
   source      = "./global-dns"
   environment = var.environment
+}
+
+module "ns1" {
+  source         = "../ns1"
+  zone           = var.ns1_zone
+  record         = var.ns1_record
+  answers        = var.ns1_answers
+  pulsar_app_id  = var.ns1_pulsar_app_id
+  pulsar_type_id = var.ns1_pulsar_type_id
 }
 
 resource "aws_kinesis_stream" "events" {

@@ -31,6 +31,20 @@ spec:
                     region:
                       type: string
                       description: Cloud region used to select provider.
+                    weights:
+                      type: object
+                      description: DNS weights for each provider.
+                      properties:
+                        aws:
+                          type: integer
+                          description: Weight for AWS endpoints.
+                        gcp:
+                          type: integer
+                          description: Weight for GCP endpoints.
+                      required:
+                        - aws
+                        - gcp
                   required:
                     - host
                     - region
+                    - weights

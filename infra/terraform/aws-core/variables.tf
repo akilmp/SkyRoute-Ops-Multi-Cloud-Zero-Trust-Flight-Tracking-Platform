@@ -25,3 +25,4 @@ variable "regional_ingress_dns" {
   description = "DNS name of the regional ingress load balancer"
   type        = string
 }
+

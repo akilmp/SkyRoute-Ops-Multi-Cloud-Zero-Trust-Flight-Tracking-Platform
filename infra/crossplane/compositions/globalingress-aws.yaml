@@ -24,3 +24,62 @@ spec:
           toFieldPath: metadata.labels.host
         - fromFieldPath: spec.parameters.region
           toFieldPath: spec.forProvider.region
+    - name: gateway
+      base:
+        apiVersion: networking.istio.io/v1beta1
+        kind: Gateway
+        metadata:
+          name: global-ingress-gateway
+        spec:
+          selector:
+            istio: ingressgateway
+          servers:
+            - port:
+                number: 80
+                name: http
+                protocol: HTTP
+              hosts:
+                - example.com
+      patches:
+        - fromFieldPath: spec.parameters.host
+          toFieldPath: spec.servers[0].hosts[0]
+        - fromFieldPath: spec.parameters.region
+          toFieldPath: metadata.labels.region
+    - name: apprunner
+      base:
+        apiVersion: apprunner.aws.crossplane.io/v1alpha1
+        kind: Service
+        spec:
+          forProvider:
+            region: us-east-1
+          providerConfigRef:
+            name: aws
+      patches:
+        - fromFieldPath: spec.parameters.host
+          toFieldPath: metadata.labels.host
+        - fromFieldPath: spec.parameters.region
+          toFieldPath: spec.forProvider.region
+    - name: ns1record
+      base:
+        apiVersion: dns.ns1.crossplane.io/v1alpha1
+        kind: Record
+        spec:
+          forProvider:
+            zone: skyroute.io
+            domain: ingress.skyroute.io
+            type: CNAME
+            answers:
+              - answer: ingress.skyroute.io
+                meta:
+                  weight: 1
+          providerConfigRef:
+            name: ns1
+      patches:
+        - fromFieldPath: spec.parameters.host
+          toFieldPath: spec.forProvider.domain
+        - fromFieldPath: spec.parameters.host
+          toFieldPath: spec.forProvider.answers[0].answer
+        - fromFieldPath: spec.parameters.region
+          toFieldPath: metadata.labels.region
+        - fromFieldPath: spec.parameters.weights.aws
+          toFieldPath: spec.forProvider.answers[0].meta.weight

@@ -16,4 +16,5 @@ output "argocd_cluster_ca" {
 
 output "cloudfront_domain_name" {
   value = aws_cloudfront_distribution.edge.domain_name
+
 }
