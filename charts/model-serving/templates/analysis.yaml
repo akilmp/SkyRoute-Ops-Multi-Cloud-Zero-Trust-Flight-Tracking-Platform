@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: model-serving-latency
+spec:
+  metrics:
+    - name: p99-latency
+      interval: 1m
+      successCondition: result < 0.5
+      failureLimit: 1
+      provider:
+        prometheus:
+          address: {{ .Values.analysis.prometheusAddress }}
+          query: |
+            histogram_quantile(0.99, sum(rate(request_duration_seconds_bucket{app="{{ include "model-serving.name" . }}"}[5m])) by (le))

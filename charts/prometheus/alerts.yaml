@@ -22,3 +22,10 @@ groups:
       severity: critical
     annotations:
       summary: "OPA Gatekeeper denied a request"
+  - alert: ModelServingCanaryLatencyHigh
+    expr: histogram_quantile(0.99, sum(rate(request_duration_seconds_bucket{app="model-serving",rollout="canary"}[5m])) by (le)) > 0.5
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Model serving canary P99 latency above 500ms"
