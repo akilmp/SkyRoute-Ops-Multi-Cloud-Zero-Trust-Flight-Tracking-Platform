@@ -1,0 +1,30 @@
+{
+  "title": "Latency RED Metrics",
+  "schemaVersion": 27,
+  "panels": [
+    {
+      "type": "graph",
+      "title": "Request Rate",
+      "datasource": "Prometheus",
+      "targets": [
+        {"expr": "sum(rate(http_requests_total[1m]))"}
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Error Rate",
+      "datasource": "Prometheus",
+      "targets": [
+        {"expr": "sum(rate(http_requests_total{status!~'2..'}[1m]))"}
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "95th Percentile Latency",
+      "datasource": "Prometheus",
+      "targets": [
+        {"expr": "histogram_quantile(0.95, sum(rate(request_duration_seconds_bucket[5m])) by (le))"}
+      ]
+    }
+  ]
+}

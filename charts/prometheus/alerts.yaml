@@ -1,0 +1,24 @@
+groups:
+- name: platform-alerts
+  rules:
+  - alert: HighLatency
+    expr: histogram_quantile(0.95, sum(rate(request_duration_seconds_bucket[5m])) by (le)) > 0.5
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "95th percentile latency above 500ms"
+  - alert: IngressUnhealthy
+    expr: sum(rate(nginx_ingress_controller_requests{status!~"2.."}[5m])) / sum(rate(nginx_ingress_controller_requests[5m])) > 0.05
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Ingress returning >5% errors"
+  - alert: OPA_Denied
+    expr: sum(rate(gatekeeper_violations_total[5m])) > 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "OPA Gatekeeper denied a request"

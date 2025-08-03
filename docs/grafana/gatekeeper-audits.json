@@ -1,0 +1,14 @@
+{
+  "title": "Gatekeeper Audits",
+  "schemaVersion": 27,
+  "panels": [
+    {
+      "type": "table",
+      "title": "Policy Violations",
+      "datasource": "Prometheus",
+      "targets": [
+        {"expr": "gatekeeper_violations_total"}
+      ]
+    }
+  ]
+}

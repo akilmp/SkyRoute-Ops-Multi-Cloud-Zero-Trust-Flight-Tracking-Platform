@@ -1,0 +1,14 @@
+{
+  "title": "Flight Telemetry Heatmap",
+  "schemaVersion": 27,
+  "panels": [
+    {
+      "type": "heatmap",
+      "title": "Events Heatmap",
+      "datasource": "Prometheus",
+      "targets": [
+        {"expr": "sum(rate(flight_events_total[5m])) by (region)"}
+      ]
+    }
+  ]
+}
