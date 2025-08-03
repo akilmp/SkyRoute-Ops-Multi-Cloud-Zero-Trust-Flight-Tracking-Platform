@@ -259,6 +259,17 @@ Materialised view in ClickHouse aggregates heat‑map tiles (XYZ) ready for MapL
 * **SLO** example: *P99 ingest latency < 500 ms over 1 day* (RED metrics exported by ingest‑api).
 * **Grafana Dashboards** stored as JSON (`docs/grafana/skyroute_dash.json`).
 
+### Enabling OpenTelemetry sidecar injection
+
+Helm charts opt in to telemetry by annotating pods for the OTel sidecar:
+
+```yaml
+podAnnotations:
+  sidecar.opentelemetry.io/inject: "true"
+```
+
+The injected container reads pipelines from `otel/collector.yaml` and ships traces to Tempo and metrics to Prometheus.
+
 Alerts:
 
 | Alert              | Threshold                 | Action                            |
