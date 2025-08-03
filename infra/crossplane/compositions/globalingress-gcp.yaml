@@ -1,0 +1,26 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: globalingress-gcp
+  labels:
+    region: us-central1
+spec:
+  compositeTypeRef:
+    apiVersion: ops.skyroute.io/v1alpha1
+    kind: CompositeGlobalIngress
+  resources:
+    - name: forwardingrule
+      base:
+        apiVersion: compute.gcp.upbound.io/v1beta1
+        kind: ForwardingRule
+        spec:
+          forProvider:
+            region: us-central1
+          providerConfigRef:
+            name: gcp
+      patches:
+        - fromFieldPath: spec.parameters.host
+          toFieldPath: metadata.labels.host
+        - fromFieldPath: spec.parameters.region
+          toFieldPath: spec.forProvider.region

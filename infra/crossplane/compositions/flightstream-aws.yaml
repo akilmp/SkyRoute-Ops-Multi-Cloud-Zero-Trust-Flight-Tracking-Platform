@@ -1,0 +1,27 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: flightstream-aws
+  labels:
+    region: us-east-1
+spec:
+  compositeTypeRef:
+    apiVersion: ops.skyroute.io/v1alpha1
+    kind: CompositeFlightStream
+  resources:
+    - name: stream
+      base:
+        apiVersion: kinesis.aws.crossplane.io/v1alpha1
+        kind: Stream
+        spec:
+          forProvider:
+            region: us-east-1
+            shardCount: 1
+          providerConfigRef:
+            name: aws
+      patches:
+        - fromFieldPath: spec.parameters.shardCount
+          toFieldPath: spec.forProvider.shardCount
+        - fromFieldPath: spec.parameters.region
+          toFieldPath: spec.forProvider.region

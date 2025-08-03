@@ -1,0 +1,27 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: clickhouse-aws
+  labels:
+    region: us-east-1
+spec:
+  compositeTypeRef:
+    apiVersion: ops.skyroute.io/v1alpha1
+    kind: CompositeClickHouseCluster
+  resources:
+    - name: instance
+      base:
+        apiVersion: ec2.aws.crossplane.io/v1beta1
+        kind: Instance
+        spec:
+          forProvider:
+            region: us-east-1
+            instanceType: t3.small
+          providerConfigRef:
+            name: aws
+      patches:
+        - fromFieldPath: spec.parameters.region
+          toFieldPath: spec.forProvider.region
+        - fromFieldPath: spec.parameters.shardCount
+          toFieldPath: metadata.labels.shardCount

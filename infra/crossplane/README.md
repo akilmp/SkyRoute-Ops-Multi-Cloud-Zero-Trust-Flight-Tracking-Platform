@@ -6,12 +6,21 @@ label supplied by claims.
 
 ## Installation
 
-Apply the composite resource definitions:
+Install the composite resource definitions followed by provider-specific compositions:
 
 ```bash
+# XRDs
 kubectl apply -f xrd/CompositeFlightStream.yaml
 kubectl apply -f xrd/CompositeClickHouseCluster.yaml
 kubectl apply -f xrd/CompositeGlobalIngress.yaml
+
+# Compositions
+kubectl apply -f compositions/flightstream-aws.yaml
+kubectl apply -f compositions/flightstream-gcp.yaml
+kubectl apply -f compositions/clickhouse-aws.yaml
+kubectl apply -f compositions/clickhouse-gcp.yaml
+kubectl apply -f compositions/globalingress-aws.yaml
+kubectl apply -f compositions/globalingress-gcp.yaml
 ```
 
 ## Example Claims

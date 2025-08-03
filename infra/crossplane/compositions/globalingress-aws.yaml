@@ -1,0 +1,26 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: globalingress-aws
+  labels:
+    region: us-east-1
+spec:
+  compositeTypeRef:
+    apiVersion: ops.skyroute.io/v1alpha1
+    kind: CompositeGlobalIngress
+  resources:
+    - name: alb
+      base:
+        apiVersion: alb.aws.crossplane.io/v1alpha1
+        kind: LoadBalancer
+        spec:
+          forProvider:
+            region: us-east-1
+          providerConfigRef:
+            name: aws
+      patches:
+        - fromFieldPath: spec.parameters.host
+          toFieldPath: metadata.labels.host
+        - fromFieldPath: spec.parameters.region
+          toFieldPath: spec.forProvider.region
