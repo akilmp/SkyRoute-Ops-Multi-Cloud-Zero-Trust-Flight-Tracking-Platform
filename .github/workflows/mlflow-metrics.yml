@@ -1,0 +1,22 @@
+name: Check Model Metrics
+
+on:
+  pull_request:
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install MLflow
+        run: pip install mlflow
+      - name: Verify latest model metrics
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+          F1_THRESHOLD: '0.85'
+        run: python .github/scripts/check_mlflow_metrics.py
