@@ -1,0 +1,36 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: compositeglobalingresses.ops.skyroute.io
+spec:
+  group: ops.skyroute.io
+  names:
+    kind: CompositeGlobalIngress
+    plural: compositeglobalingresses
+  claimNames:
+    kind: GlobalIngress
+    plural: globalingresses
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  properties:
+                    host:
+                      type: string
+                      description: Hostname for the global ingress.
+                    region:
+                      type: string
+                      description: Cloud region used to select provider.
+                  required:
+                    - host
+                    - region

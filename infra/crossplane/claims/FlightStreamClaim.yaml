@@ -1,0 +1,14 @@
+---
+apiVersion: ops.skyroute.io/v1alpha1
+kind: FlightStream
+metadata:
+  name: example-flightstream
+  labels:
+    region: us-east-1
+spec:
+  compositionSelector:
+    matchLabels:
+      region: us-east-1
+  parameters:
+    shardCount: 2
+    region: us-east-1

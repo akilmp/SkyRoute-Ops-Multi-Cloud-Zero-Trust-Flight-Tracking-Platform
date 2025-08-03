@@ -1,0 +1,36 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: compositeflightstreams.ops.skyroute.io
+spec:
+  group: ops.skyroute.io
+  names:
+    kind: CompositeFlightStream
+    plural: compositeflightstreams
+  claimNames:
+    kind: FlightStream
+    plural: flightstreams
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                parameters:
+                  type: object
+                  properties:
+                    shardCount:
+                      type: integer
+                      description: Number of shards for the stream.
+                    region:
+                      type: string
+                      description: Cloud region used to select provider.
+                  required:
+                    - shardCount
+                    - region

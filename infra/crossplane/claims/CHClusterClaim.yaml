@@ -1,0 +1,14 @@
+---
+apiVersion: ops.skyroute.io/v1alpha1
+kind: CHCluster
+metadata:
+  name: example-chcluster
+  labels:
+    region: us-central1
+spec:
+  compositionSelector:
+    matchLabels:
+      region: us-central1
+  parameters:
+    shardCount: 3
+    region: us-central1
