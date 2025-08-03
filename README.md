@@ -315,6 +315,22 @@ jobs:
 * **Chaos Script** `hack/kill-ingress.sh`: deletes AWS Istio ingress‑gateway; watch NS1 API until weight=0 (≈ 25 s).
 * **Return Path**: Argo Roll‑out recreates pod; NS1 weight gradually restored via Pulsar feedback.
 
+### NS1 API Usage
+
+`hack/kill-ingress.sh` and the accompanying Terraform require access to the NS1
+API.  Export the following variables before invoking the script:
+
+```bash
+export NS1_API_KEY=xxxxxxxx          # NS1 API token
+export NS1_ZONE=example.com          # DNS zone hosting the record
+export NS1_RECORD=ingress.example.com # FQDN of the weighted record
+export NS1_ANSWER_ID=<answer-uuid>   # Answer ID for this cluster
+```
+
+The script deletes Istio ingress pods and polls
+`https://api.nsone.net/v1/zones/${NS1_ZONE}/${NS1_RECORD}` until the selected
+answer's `weight` field reaches `0`.
+
 ---
 
 ## Cost Management
