@@ -1,0 +1,25 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/write-back-method: git
+spec:
+  project: default
+  source:
+    repoURL: >-
+      https://github.com/example/SkyRoute-Ops-Multi-Cloud-Zero-Trust-Flight-Tracking-Platform.git
+    targetRevision: HEAD
+    path: argo
+    directory:
+      recurse: true
+      exclude: '{root.yaml}'
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
