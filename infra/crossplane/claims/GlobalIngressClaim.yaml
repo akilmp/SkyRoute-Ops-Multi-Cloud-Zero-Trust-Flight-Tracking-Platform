@@ -12,3 +12,6 @@ spec:
   parameters:
     host: ingress.skyroute.io
     region: us-east-1
+    weights:
+      aws: 1
+      gcp: 1
