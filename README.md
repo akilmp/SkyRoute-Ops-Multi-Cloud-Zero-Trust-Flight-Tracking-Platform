@@ -153,26 +153,17 @@ skyroute-ops/
    cd skyroute-ops
    cp .env.sample .env   # set AWS/GCP creds & NS1 token
    ```
-2. **Kind + Istio**
+2. **Bootstrap dev cluster & services**
 
    ```bash
-   kind create cluster --name skyroute-dev --image kindest/node:v1.29.0
-   istioctl install -y --set profile=demo
-   kubectl label namespace default istio-injection=enabled
+   ./scripts/dev-setup.sh
    ```
-3. **Run ClickHouse & services**
-
-   ```bash
-   helm repo add clickhouse https://charts.clickhouse.com/
-   helm install ch clickhouse/clickhouse --set persistence.enabled=false
-   helm install ingest-api charts/ingest-api --set image.tag=dev
-   ```
-4. **Simulate ADS‑B feed**
+3. **Simulate ADS‑B feed**
 
    ```bash
    go run services/ingest-api/cmd/simulator/main.go --rate 50
    ```
-5. **Access**
+4. **Access**
 
    * Grafana: [http://localhost:3000](http://localhost:3000) (admin/admin)
    * Gateway: [http://localhost:8080/graphql](http://localhost:8080/graphql)
