@@ -20,3 +20,8 @@ variable "edge_lambda_pubsub_topic" {
   default     = ""
 }
 
+
+variable "regional_ingress_dns" {
+  description = "DNS name of the regional ingress load balancer"
+  type        = string
+}

@@ -25,3 +25,8 @@ variable "domain" {
   description = "Base domain for Cloud DNS"
   type        = string
 }
+
+variable "cdn_backend_group" {
+  description = "Instance group or NEG backing the Cloud CDN service"
+  type        = string
+}
