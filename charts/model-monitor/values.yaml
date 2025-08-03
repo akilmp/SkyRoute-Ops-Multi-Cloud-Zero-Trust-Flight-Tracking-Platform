@@ -1,0 +1,14 @@
+# Default values for model-monitor.
+image:
+  repository: myorg/model-monitor
+  pullPolicy: IfNotPresent
+  tag: "1.0.0"
+
+schedule: "*/5 * * * *"
+
+service:
+  port: 8000
+
+config:
+  baselinePath: /data/baseline.csv
+  recentPath: /data/recent.csv
