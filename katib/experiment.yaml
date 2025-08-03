@@ -1,0 +1,53 @@
+apiVersion: kubeflow.org/v1beta1
+kind: Experiment
+metadata:
+  name: training-pipeline-random-forest
+spec:
+  objective:
+    type: maximize
+    goal: 0.95
+    objectiveMetricName: accuracy
+  algorithm:
+    algorithmName: random
+  parameters:
+    - name: N_ESTIMATORS
+      parameterType: int
+      feasibleSpace:
+        min: "50"
+        max: "200"
+    - name: MAX_DEPTH
+      parameterType: int
+      feasibleSpace:
+        min: "3"
+        max: "10"
+  trialTemplate:
+    primaryContainerName: training
+    trialParameters:
+      - name: nEstimators
+        description: Number of estimators for the RandomForest model
+        reference: N_ESTIMATORS
+      - name: maxDepth
+        description: Maximum depth of the RandomForest model
+        reference: MAX_DEPTH
+    trialSpec:
+      apiVersion: batch/v1
+      kind: Job
+      spec:
+        template:
+          spec:
+            restartPolicy: Never
+            containers:
+              - name: training
+                image: ghcr.io/example/training-pipeline:latest
+                command:
+                  - python
+                  - /app/training_pipeline.py
+                env:
+                  - name: N_ESTIMATORS
+                    value: "{{trialParameters.nEstimators}}"
+                  - name: MAX_DEPTH
+                    value: "{{trialParameters.maxDepth}}"
+                  - name: TRAINING_DATA
+                    value: /data/data.csv
+                  - name: MODEL_OUTPUT
+                    value: /output/model.joblib

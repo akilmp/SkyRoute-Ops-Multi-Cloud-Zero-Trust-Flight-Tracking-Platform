@@ -43,6 +43,15 @@ jobs:
             fi
           done
 
+      - name: Submit Katib experiment
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        run: |
+          kubectl apply -f katib/experiment.yaml
+          kubectl wait --for=condition=Succeeded experiment/training-pipeline-random-forest --timeout=2h || true
+          kubectl get experiment/training-pipeline-random-forest -o jsonpath='{.status.currentOptimalTrial.parameterAssignments}' > katib-best-params.json
+          cat katib-best-params.json
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
