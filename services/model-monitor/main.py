@@ -1,5 +1,7 @@
 import os
+import signal
 import time
+import threading
 import pandas as pd
 from prometheus_client import Gauge, start_http_server
 from evidently.report import Report
@@ -13,6 +15,17 @@ SLEEP_SECONDS = int(os.getenv("SLEEP_SECONDS", "30"))
 # Prometheus metrics
 DRIFT_SHARE = Gauge("model_drift_share", "Share of features with detected drift")
 DRIFT_DETECTED = Gauge("model_drift_detected", "Whether dataset drift was detected (1=yes)")
+
+
+stop_event = threading.Event()
+
+
+def _handle_sigterm(signum, frame):
+    """Signal handler to initiate graceful shutdown."""
+    stop_event.set()
+
+
+signal.signal(signal.SIGTERM, _handle_sigterm)
 
 
 def compute_drift():
@@ -30,8 +43,9 @@ def compute_drift():
 
 def main() -> None:
     start_http_server(METRICS_PORT)
-    compute_drift()
-    time.sleep(SLEEP_SECONDS)
+    while not stop_event.is_set():
+        compute_drift()
+        stop_event.wait(SLEEP_SECONDS)
 
 
 if __name__ == "__main__":
