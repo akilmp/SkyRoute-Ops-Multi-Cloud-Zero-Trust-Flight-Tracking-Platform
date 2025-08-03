@@ -1,0 +1,27 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: flightstream-gcp
+  labels:
+    region: us-central1
+spec:
+  compositeTypeRef:
+    apiVersion: ops.skyroute.io/v1alpha1
+    kind: CompositeFlightStream
+  resources:
+    - name: topic
+      base:
+        apiVersion: pubsub.gcp.upbound.io/v1beta1
+        kind: Topic
+        spec:
+          forProvider:
+            labels:
+              region: us-central1
+          providerConfigRef:
+            name: gcp
+      patches:
+        - fromFieldPath: spec.parameters.shardCount
+          toFieldPath: metadata.labels.shardCount
+        - fromFieldPath: spec.parameters.region
+          toFieldPath: spec.forProvider.labels.region

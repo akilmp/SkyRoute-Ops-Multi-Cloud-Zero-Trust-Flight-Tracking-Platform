@@ -1,0 +1,30 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: clickhouse-gcp
+  labels:
+    region: us-central1
+spec:
+  compositeTypeRef:
+    apiVersion: ops.skyroute.io/v1alpha1
+    kind: CompositeClickHouseCluster
+  resources:
+    - name: instance
+      base:
+        apiVersion: compute.gcp.upbound.io/v1beta1
+        kind: Instance
+        spec:
+          forProvider:
+            zone: us-central1-a
+          providerConfigRef:
+            name: gcp
+      patches:
+        - fromFieldPath: spec.parameters.shardCount
+          toFieldPath: metadata.labels.shardCount
+        - fromFieldPath: spec.parameters.region
+          toFieldPath: spec.forProvider.zone
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-a"
