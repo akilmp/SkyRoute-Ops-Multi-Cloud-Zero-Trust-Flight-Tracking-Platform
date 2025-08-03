@@ -11,18 +11,18 @@ data:
         protocols:
           grpc:
           http:
-    
+
     exporters:
       otlp/tempo:
-        endpoint: tempo:4317
+        endpoint: tempo.default.svc.cluster.local:4317
         tls:
           insecure: true
       prometheus:
         endpoint: "0.0.0.0:8889"
-    
+
     processors:
       batch:
-    
+
     service:
       pipelines:
         traces:
