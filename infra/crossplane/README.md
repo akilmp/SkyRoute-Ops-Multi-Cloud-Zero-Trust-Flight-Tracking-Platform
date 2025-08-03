@@ -6,7 +6,12 @@ label supplied by claims.
 
 ## Installation
 
-Install the composite resource definitions followed by provider-specific compositions:
+Install the composite resource definitions followed by provider-specific compositions. The global ingress now provisions Istio gateways, Cloud Run or App Runner services, and NS1 DNS records so the `provider-kubernetes` and `provider-ns1` providers must be installed:
+
+```bash
+kubectl crossplane install provider crossplane/provider-kubernetes:v0.9.0
+kubectl crossplane install provider crossplane/provider-ns1:v0.3.0
+```
 
 ```bash
 # XRDs
@@ -37,6 +42,6 @@ kubectl apply -f claims/FlightStreamClaim.yaml
 # ClickHouse cluster in a GCP region
 kubectl apply -f claims/CHClusterClaim.yaml
 
-# Global ingress
+# Global ingress with weighted DNS
 kubectl apply -f claims/GlobalIngressClaim.yaml
 ```
