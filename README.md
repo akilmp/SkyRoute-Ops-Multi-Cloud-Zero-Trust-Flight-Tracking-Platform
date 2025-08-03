@@ -102,32 +102,37 @@
 
 ```
 skyroute-ops/
-├── infra/
-│   ├── terraform/
-│   │   ├── aws-core/          # VPC, EKS, Kinesis, WAF
-│   │   └── gcp-core/          # VPC, GKE, CloudArmor, PubSub
-│   └── crossplane/
-│       ├── xrd/               # CompositeResourceDefinitions
-│       └── claims/            # FlightStreamClaim.yaml
-├── charts/                    # Helm charts for each micro‑service
-│   └── ingest-api/
 ├── argo/                      # app-of-apps manifests
-├── services/
-│   ├── ingest-api/            # Go service for ADS‑B fan‑out
-│   ├── enrich-weather/        # Python Cloud Run svc
-│   └── gateway/               # FastAPI GraphQL gateway
-├── postgres/                  # init scripts for routes & NOTAM tables
-├── clickhouse/                # schemas & materialized views
+├── charts/                    # Helm charts for each component
+├── clickhouse/                # OLAP schemas & materialized views
+├── docs/
+│   └── grafana/               # dashboard definitions
+├── featurestore/              # Feast feature definitions & config
+├── hack/                      # chaos scripts
+├── infra/
+│   ├── crossplane/            # XRDs, compositions & claims
+│   └── terraform/             # VPC, EKS/GKE core modules
+│       ├── aws-core/
+│       └── gcp-core/
+├── katib/                     # Katib experiment manifests
+├── k8s/                       # raw Kubernetes manifests
+├── ml/                        # ETL & training pipelines
+├── mlflow/                    # MLflow tracking server setup
 ├── otel/                      # collector configs
 ├── policy/                    # Gatekeeper OPA policies
-├── hack/
-│   └── kill-ingress.sh        # chaos script
-├── .github/workflows/
-│   └── ci-cd.yml
-└── docs/
-    ├── architecture.drawio
-    ├── demo_script.md
-    └── cost_estimate.xlsx
+├── postgres/                  # database init scripts & migrations
+├── scripts/                   # dev environment helpers
+├── services/
+│   ├── edge-lambda/           # serverless edge parser
+│   ├── enrich-weather/        # Cloud Run weather enricher
+│   ├── gateway/               # FastAPI GraphQL gateway
+│   ├── ingest-api/            # Go service for ADS‑B fan‑out
+│   ├── model-monitor/         # model drift detection
+│   ├── model-serving/         # ML inference service
+│   └── training/              # model training jobs
+├── terraform/                 # standalone Pulsar stack
+└── .github/
+    └── workflows/             # CI workflows (ci-cd.yml, mlflow-metrics.yml)
 ```
 
 ---
