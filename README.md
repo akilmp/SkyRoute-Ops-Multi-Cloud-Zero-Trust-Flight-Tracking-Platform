@@ -328,25 +328,6 @@ jobs:
 | Grafana Cloud    | Free tier 10 k series                  | \$0           |
 | **Total (idle)** |                                        | **\~\$24**    |
 
----
-
-## Demo Recording Guide
-
-| Timestamp | Shot                        | Notes                                          |
-| --------- | --------------------------- | ---------------------------------------------- |
-| 0:00      | Webcam intro                | Hook: “Can your app survive region loss?”      |
-| 0:30      | Arch diagram                | animate plane → edge → clouds flow             |
-| 1:15      | Grafana live heat‑map       | highlight sub‑second updates                   |
-| 1:45      | Terminal: `kill-ingress.sh` | explain chaos drill                            |
-| 2:15      | NS1 dashboard               | watch weight shift to GCP                      |
-| 2:45      | Latency graph               | stays green; SLO passes                        |
-| 3:15      | Argo CD canary              | deploy v2; error budget burn triggers rollback |
-| 4:15      | Gatekeeper deny demo        | attempt `kubectl apply bad-svc.yaml`           |
-| 4:45      | Tempo trace                 | show end‑to‑end call across meshes             |
-| 5:30      | Cost slide                  | less than \$25/mo; carbon footprint saved      |
-| 5:50      | Outro                       | GitHub link + LinkedIn share                   |
-
-Record 1440p\@60 fps, OBS scene collection stored in `docs/obs/skyroute.json`.
 
 ---
 
