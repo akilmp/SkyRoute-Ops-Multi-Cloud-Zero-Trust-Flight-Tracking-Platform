@@ -38,7 +38,7 @@ spec:
             restartPolicy: Never
             containers:
               - name: training
-                image: ghcr.io/example/training-pipeline:latest
+                image: ghcr.io/example/training-pipeline-mlflow:latest
                 command:
                   - python
                   - /app/training_pipeline.py
@@ -51,3 +51,11 @@ spec:
                     value: /data/data.csv
                   - name: MODEL_OUTPUT
                     value: /output/model.joblib
+                  - name: MLFLOW_TRACKING_URI
+                    value: http://mlflow:5000
+                  - name: MLFLOW_EXPERIMENT_NAME
+                    value: flight-model
+                  - name: MLFLOW_MODEL_NAME
+                    value: flight-model
+                  - name: MODEL_METRIC_THRESHOLD
+                    value: "0.85"
