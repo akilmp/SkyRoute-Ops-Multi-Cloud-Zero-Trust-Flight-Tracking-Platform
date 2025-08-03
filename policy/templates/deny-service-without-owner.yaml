@@ -1,0 +1,19 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: denyservicewithoutowner
+spec:
+  crd:
+    spec:
+      names:
+        kind: DenyServiceWithoutOwner
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package denyservicewithoutowner
+
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "Service"
+          not input.review.object.metadata.labels.owner
+          msg := sprintf("Service %q is missing required 'owner' label", [input.review.object.metadata.name])
+        }

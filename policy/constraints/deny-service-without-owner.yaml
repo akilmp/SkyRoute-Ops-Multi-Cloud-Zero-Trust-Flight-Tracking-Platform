@@ -1,0 +1,9 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: DenyServiceWithoutOwner
+metadata:
+  name: deny-service-without-owner
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Service"]
