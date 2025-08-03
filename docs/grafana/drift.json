@@ -1,0 +1,22 @@
+{
+  "title": "Model Drift Metrics",
+  "schemaVersion": 27,
+  "panels": [
+    {
+      "type": "graph",
+      "title": "Drifted Columns Share",
+      "datasource": "Prometheus",
+      "targets": [
+        {"expr": "model_drift_share"}
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Drift Detected",
+      "datasource": "Prometheus",
+      "targets": [
+        {"expr": "model_drift_detected"}
+      ]
+    }
+  ]
+}
