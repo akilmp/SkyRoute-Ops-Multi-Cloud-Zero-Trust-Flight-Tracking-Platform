@@ -1,0 +1,14 @@
+---
+apiVersion: ops.skyroute.io/v1alpha1
+kind: GlobalIngress
+metadata:
+  name: example-global-ingress
+  labels:
+    region: us-east-1
+spec:
+  compositionSelector:
+    matchLabels:
+      region: us-east-1
+  parameters:
+    host: ingress.skyroute.io
+    region: us-east-1
